@@ -65,7 +65,7 @@ displays:
 ### nb-cols
 The function `nb-cols` returns the number of columns of a dataframe.
 ```typst
-#let nb = nb-rows(df)
+#let nb = nb-cols(df)
 #nb
 ```
 displays:
