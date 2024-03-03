@@ -6,7 +6,7 @@
 
  ## Simple use case
 
- A dataframe is created given its array for each column. Displaying the dataframe can be done using `plot` or `table` functions:
+ A dataframe is created given its array for each column. Displaying the dataframe can be done using `plot` or `tbl` functions:
  ```typst
  #import "@preview/dataframes:0.1.0": *
  
@@ -16,7 +16,7 @@
                     Vegetables:(11,15,35)
                     )
 Stocks:
-#table(df)
+#tbl(df)
 #plot(df, x:"Year", x-tick-step:1)
  ```
 ![Example 1](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-01.png)
@@ -94,7 +94,7 @@ The function `add-colls` add columns to the dataframe. Columns are provided with
 
 ```typst
 #let df = add-cols(df, Milk:(19,5,15))
-#table(df)
+#tbl(df)
 ```
 displays:
 
@@ -112,7 +112,7 @@ The function `add-rows` add rows to the dataframe. Rows are provided as named ar
                     Fruits:25, 
                     Vegetables:20, 
                     Milk:10)
-#table(df2)
+#tbl(df2)
 
 #let df3 = add-rows(df, 
                     Year:(2024,2025), 
@@ -121,9 +121,9 @@ The function `add-rows` add rows to the dataframe. Rows are provided as named ar
                     Milk:(10,5))
 
 #columns(2)[
-  #table(df2)
+  #tbl(df2)
   #colbreak()
-  #table(df3)]
+  #tbl(df3)]
 ```
 displays:
 
@@ -135,9 +135,9 @@ If the arguments of function `add-rows` do not provides each columns, the missin
 #let df2 = add-rows(df, Year:2024, Fruits:25, Vegetables:20)
 #let df3 = add-rows(df, Year:2024, Fruits:25, Vegetables:20, missing:"/")
 #columns(2)[
-  #table(df2)
+  #tbl(df2)
   #colbreak()
-  #table(df3)]
+  #tbl(df3)]
 ```
 displays:
 
@@ -168,9 +168,9 @@ The concatenation of two dataframes can be done using the `concat` function. The
           )
 #let df3 = dataframe(Milk:(19,5,15))
 #columns(2)[
-#table(concat(df,df2))
+#tbl(concat(df,df2))
 #colbreak()
-#table(concat(df,df3))
+#tbl(concat(df,df3))
 ```
 displays:
 
@@ -191,7 +191,7 @@ The `slice` function allows to select rows and cols of a dataframe returning a n
 Example :
 
 ```typst
-#table(slice(df, row-start:1, col-start:1))
+#tbl(slice(df, row-start:1, col-start:1))
 ```
 displays:
 
@@ -213,7 +213,7 @@ Example:
 ```typst
 #let df2 = select(df, rows:r=>r.Year > 2022)
 #let df3 = select(df, cols:r=>r!="Fruits")
-#table(select(df, cols:("Fruits","Vegetables"),
+#tbl(select(df, cols:("Fruits","Vegetables"),
                   rows:r=>r.Year > 2022))
 ```
 
@@ -268,3 +268,161 @@ These rules applies to all the following two elements functions:
 |`div`      | Division `div(df,other)` |
 
 ### Cumulative operations
+A cumulative operation on a dataframe is an operation where each row (or col) is the result of an operation on all preceding rows (or cols).
+Each cumulative operation take a dataframe `df` as positional argument and `axis` as named argument. If `axis:1` (default), the operation is made on rows and if `axis:2`, the operation is made on columns.
+
+The cumulative operations are the following:
+
+|Function | Description |
+|-|-|
+|`cumsum`| Cumulative sum|
+|`cumprod`| Cumulative product|
+
+Example:
+
+
+![Example 8](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-08.png)
+
+### Folding operation
+
+A folding operation is an operation which result in one row (or col) using a folding operation. For example, the `sum(df)` function on a dataframe `df` will give a row with each element is the sum of the corresponding `df` col.
+
+Each folding operation take a dataframe `df` as positional argument and `axis` as named argument. If `axis:1` (default), the operation is made on rows and if `axis:2`, the operation is made on columns.
+
+The folding operations are the following:
+
+|Function | Description |
+|-|-|
+| `sum` | sum of all elements of each column or row |
+| `product` | product of all elements of each column or row |
+| `min` | minimum of all elements of each column or row |
+| `max` | maximum of all elements of each column or row |
+| `mean` | mean value of all elements of each column or row |
+
+Example:
+
+
+![Example 9](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-09.png)
+
+### Other operations
+
+|Function | Description |
+|-----------|-|
+|`diff(df,axis:1)`| Compute the difference between each element of `df` and the element in the same column (row if `axis:2`) and preceding row (column if `axis:2`)
+
+## Dataframe from CSV
+
+Dataframes can be created from a CSV file using the `dataframe-from-csv` function which takes a `CSV` object as positional argument.
+
+The `dataframe-from-csv` use the `tabut` package but, in addition, this function supports datetime fields. 
+
+Example:
+
+```typst
+#let df = dataframe-from-csv(csv("data/AAPL.csv"))
+#tbl(slice(df, row-end:5))
+```
+displays:
+
+![Example 10](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-10.png)
+
+
+## Display a dataframe as table
+
+the `tbl` function displays the dataframe as a typst table. This function use the `tabut` function of the `tabut` package. All named argument as passed to the `tabut` function.
+
+Example: display transposed dataframe
+
+```typst
+#let df = slice(dataframe-from-csv(csv("data/AAPL.csv")),row-end:5)
+#tbl(df, transpose:true)
+```
+displays:
+
+
+![Example 11](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-11.png)
+
+if you want to specify more display details usinf `tablex` for example, the `tabut-cells` is available for dataframes.
+
+All arguments are passed to `tabut-cells` function.
+
+Example:
+
+```typst
+#let df = dataframe(
+                    Year:(2021,2022,2023),
+                    Fruits:(10,20,30),
+                    Vegetables:(11,15,35)
+                    )
+#to-array(df)
+#import "@preview/tablex:0.0.8":*
+#tablex(
+  ..tabut-cells(df,
+  (
+    (header: "Year", func:r=>r.Year),
+    (header:"Fruits", func:r=>r.Fruits)
+  ),
+  headers:true
+))
+```
+
+displays:
+
+![Example 12](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-12.png)
+
+For more informations about using `tabut-cells` function, see the `tabut` package documentation.
+
+## Display a dataframe as plot
+
+The `plot` function allowed to plot dataframes. Each column of the dataframe is a curve labeled in a legend by their column name. x-axis is the dataframe index if it is not provided in arguments, but a specified column can be used as x-axis which supports datetime.
+
+The plot is build using the `cetz` package. All default parameters are chosen in order to have a scientific standard look and feel, but additionnal parameters can be transmitted to `cetz` functions.
+
+```typst
+plot(df,    x:none, 
+            y:none, 
+            x-label:none, 
+            y-label:none, 
+            label-text-size:11pt,
+            tick-text-size:8pt,
+            y-tick-step:auto,
+            x-tick-step:auto,
+            x-tick-rotate:0deg,
+            x-tick-extra-space: 0cm,
+            x-minor-tick-step:auto,
+            x-min:none,
+            y-min:none,
+            x-max:none,
+            y-max:none,
+            grid:false,
+            width:80%,
+            style:(:),
+            legend-default-position:"legend.inner-south-east",
+            ..kw)
+```
+
+| Argument | Description |
+|-|-|
+|`df`| The dataframe to display |
+|`x`| The column name for the x-axis. By default, the dataframe index is used. x-axis column name can be datatime objects. In this case, tick labels are displayed using datetime.display(). x-axis can be a column which contains strings. In this case, the strings appears as x-tick labels and `x-tick-step` has no effect. |
+|`y`| The curves to plot as y-axis. By default, all columns of the dataframe are plotted. `y` can be a list of column names to plot. |
+|`x-label`| The label on x-axis. By default, `x-label` is the column name of the chosen column for x-axis.  |
+|`y-label`| The label on y-axis. By default, no label. |
+|`label-text-size`| The text size of x-label and y-label.  |
+|`tick-text-size`| The text size for tick labels. |
+|`y-tick-step`| The separation between y-ticks. |
+|`x-tick-step`| The separation between x-ticks. If the dataframe column chosen for x-axis contains strings, `x-tick-step` must be a duration object.|
+|`x-tick-rotate`| An angle for x-tick rotation. |
+|`x-tick-extra-space`| An extra space added on each tick label. Useful when `x-tick-rotate` is used. |
+|`x-minor-tick-step`| The separation between minor x-ticks. |
+|`x-min`| The min value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-min` must be a datetime object. |
+|`y-min`| The min value for y-axis |
+|`x-max`| The max value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-max` must be a datetime object. |
+|`y-max`| The max value for y-axis. |
+|`grid`| `true` to draw a grid for both x and y-axis. |
+|`width`| The width of the canvas plot. |
+|`style`| A dictionary which defines each curve plot style. It is indexed by column names of the dataframe. Each value of this dictionary is also a dictionary with the following allowed keys: <BR> `color`: the color of the curve. Any values accepted by `cetz` is allowed.<BR> `label`: the label of the curve. By default label is the column name of the dataframe.<BR> `thickness`: the thickness of the curve. 0.5pt by default.<BR> `mark`: the mark for each point of the curve. By default, no mark but any character is allowed in addition to any value accepted by `cetz`.<BR>`mark-size`: the size of the mark. 0.15 by default.<BR>`dash`: `none`, `dashed`, `dotted` or any value accepted by `cetz`. <BR>In addition, any argument which is accepted by `cetz` will be passed to the `cetz.plot.add` function. |
+|`legend-default-position`| Legend default position. All values accepted by `cetz` for legend position are allowed. |
+| `kw` | additionnal arguments passed to `cetz.plot.plot` function |
+
+
