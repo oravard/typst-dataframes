@@ -342,7 +342,7 @@ displays:
 
 ![Example 11](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-11.png)
 
-if you want to specify more display details usinf `tablex` for example, the `tabut-cells` is available for dataframes.
+if you want to specify more display details using `tablex` (as an example), the `tabut-cells` is available for dataframes.
 
 All arguments are passed to `tabut-cells` function.
 
