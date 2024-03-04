@@ -346,6 +346,8 @@ if you want to specify more display details using `tablex` (as an example), the 
 
 All arguments are passed to `tabut-cells` function.
 
+See `tabut` package documentation for more details.
+
 Example:
 
 ```typst
@@ -354,7 +356,6 @@ Example:
                     Fruits:(10,20,30),
                     Vegetables:(11,15,35)
                     )
-#to-array(df)
 #import "@preview/tablex:0.0.8":*
 #tablex(
   ..tabut-cells(df,
@@ -376,7 +377,7 @@ For more informations about using `tabut-cells` function, see the `tabut` packag
 
 The `plot` function allowed to plot dataframes. Each column of the dataframe is a curve labeled in a legend by their column name. x-axis is the dataframe index if it is not provided in arguments, but a specified column can be used as x-axis which supports datetime.
 
-The plot is build using the `cetz` package. All default parameters are chosen in order to have a scientific standard look and feel, but additionnal parameters can be transmitted to `cetz` functions.
+The plot is build using the `cetz` package. All default parameters are chosen in order to have a scientific standard look and feel, but additionnal parameters are transmitted to `cetz` functions.
 
 ```typst
 plot(df,    x:none, 
@@ -405,7 +406,7 @@ plot(df,    x:none,
 |-|-|
 |`df`| The dataframe to display |
 |`x`| The column name for the x-axis. By default, the dataframe index is used. x-axis column name can be datatime objects. In this case, tick labels are displayed using datetime.display(). x-axis can be a column which contains strings. In this case, the strings appears as x-tick labels and `x-tick-step` has no effect. |
-|`y`| The curves to plot as y-axis. By default, all columns of the dataframe are plotted. `y` can be a list of column names to plot. |
+|`y`| The curves to plot as y-axis. By default, all columns of the dataframe are plotted. `y` can be an array of column names to plot. |
 |`x-label`| The label on x-axis. By default, `x-label` is the column name of the chosen column for x-axis.  |
 |`y-label`| The label on y-axis. By default, no label. |
 |`label-text-size`| The text size of x-label and y-label.  |
@@ -426,3 +427,19 @@ plot(df,    x:none,
 | `kw` | additionnal arguments passed to `cetz.plot.plot` function |
 
 
+Example:
+
+```typst
+#let df = dataframe-from-csv(csv("data/AAPL.csv"))
+#plot(df, x:"Date",
+          y:("Close","High","Low"),
+          x-tick-step:duration(days:5),
+          x-tick-rotate:45deg, x-tick-extra-space:0.5cm,
+          style:(
+            "Close": (color:red, thickness:1pt, mark:"o", line:"spline"),
+            "Low":(color:rgb(250,40,0,100),hypograph:true, thickness:2pt),
+            "High":(color:rgb(0,250,0,100),epigraph:true, thickness:2pt)
+          ))
+```
+
+![Example 13](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-13.png)
