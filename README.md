@@ -414,7 +414,7 @@ plot(df,    x:none,
 |`y-tick-step`| The separation between y-ticks. |
 |`x-tick-step`| The separation between x-ticks. If the dataframe column chosen for x-axis contains strings, `x-tick-step` must be a duration object.|
 |`x-tick-rotate`| An angle for x-tick rotation. |
-|`x-tick-extra-space`| An extra space added on each tick label. Useful when `x-tick-rotate` is used. |
+|`x-tick-anchor`| Anchor of the tick labels ("west", "east", "center"). Useful when `x-tick-rotate` is used. |
 |`x-minor-tick-step`| The separation between minor x-ticks. |
 |`x-min`| The min value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-min` must be a datetime object. |
 |`y-min`| The min value for y-axis |
@@ -424,7 +424,7 @@ plot(df,    x:none,
 |`width`| The width of the canvas plot. |
 |`style`| A dictionary which defines each curve plot style. It is indexed by column names of the dataframe. Each value of this dictionary is also a dictionary with the following allowed keys: <BR> `color`: the color of the curve. Any values accepted by `cetz` is allowed.<BR> `label`: the label of the curve. By default label is the column name of the dataframe.<BR> `thickness`: the thickness of the curve. 0.5pt by default.<BR> `mark`: the mark for each point of the curve. By default, no mark but any character is allowed in addition to any value accepted by `cetz`.<BR>`mark-size`: the size of the mark. 0.15 by default.<BR>`dash`: `none`, `dashed`, `dotted` or any value accepted by `cetz`. <BR>In addition, any argument which is accepted by `cetz` will be passed to the `cetz.plot.add` function. |
 |`legend-default-position`| Legend default position. All values accepted by `cetz` for legend position are allowed. |
-| `kw` | additionnal arguments passed to `cetz.plot.plot` function |
+| `kw` | additionnal arguments passed to `cetz.plot.plot` function. See `cetz` documentation for more information on available arguments. |
 
 
 Example:
@@ -434,12 +434,13 @@ Example:
 #plot(df, x:"Date",
           y:("Close","High","Low"),
           x-tick-step:duration(days:5),
-          x-tick-rotate:45deg, x-tick-extra-space:0.5cm,
+          x-tick-rotate:-45deg, x-tick-anchor:"west",
           style:(
             "Close": (color:red, thickness:1pt, mark:"o", line:"spline"),
             "Low":(color:rgb(250,40,0,100),hypograph:true, thickness:2pt),
             "High":(color:rgb(0,250,0,100),epigraph:true, thickness:2pt)
           ))
 ```
+displays:
 
 ![Example 13](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-13.png)
