@@ -19,7 +19,7 @@ Stocks:
 #tbl(df)
 #plot(df, x:"Year", x-tick-step:1)
  ```
-![Example 1](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-01.png)
+![Example 1](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-01.png)
 
 ## Dataframe creation
 
@@ -98,7 +98,7 @@ The function `add-colls` add columns to the dataframe. Columns are provided with
 ```
 displays:
 
-![Example 2](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-02.png)
+![Example 2](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-02.png)
 
 a shortcut `hcat` to `add-cols` is provided for people who are more confortable with Python or Julia terminology.
 
@@ -127,7 +127,7 @@ The function `add-rows` add rows to the dataframe. Rows are provided as named ar
 ```
 displays:
 
-![Example 3](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-03.png)
+![Example 3](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-03.png)
 
 If the arguments of function `add-rows` do not provides each columns, the missing elements are replaced with the `missing` value:
 ```typst
@@ -141,7 +141,7 @@ If the arguments of function `add-rows` do not provides each columns, the missin
 ```
 displays:
 
-![Example 4](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-04.png)
+![Example 4](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-04.png)
 
 Be carreful using the `missing` argument which default is `none`. Future numerical operations using rows / cols will raise an error. Provide a numerical value for the `missing` argument if you want to do future numerical operations between rows / cols.
 
@@ -174,7 +174,7 @@ The concatenation of two dataframes can be done using the `concat` function. The
 ```
 displays:
 
-![Example 5](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-05.png)
+![Example 5](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-05.png)
 
 The dataframe `df2` is equivalent to adding row to `df` while `df3` is equivalent to adding column to `df`.
 
@@ -196,7 +196,7 @@ Example :
 displays:
 
 
-![Example 6](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-06.png)
+![Example 6](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-06.png)
 
 ### select 
 
@@ -256,7 +256,7 @@ For example, some elements can be added to a dataframe using the `add(df,other)`
 
 Example:
 
-![Example 7](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-07.png)
+![Example 7](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-07.png)
 
 These rules applies to all the following two elements functions:
 
@@ -281,7 +281,7 @@ The cumulative operations are the following:
 Example:
 
 
-![Example 8](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-08.png)
+![Example 8](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-08.png)
 
 ### Folding operation
 
@@ -302,7 +302,7 @@ The folding operations are the following:
 Example:
 
 
-![Example 9](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-09.png)
+![Example 9](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-09.png)
 
 ### Other operations
 
@@ -324,7 +324,7 @@ Example:
 ```
 displays:
 
-![Example 10](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-10.png)
+![Example 10](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-10.png)
 
 
 ## Display a dataframe as table
@@ -340,7 +340,7 @@ Example: display transposed dataframe
 displays:
 
 
-![Example 11](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-11.png)
+![Example 11](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-11.png)
 
 if you want to specify more display details using `tablex` (as an example), the `tabut-cells` is available for dataframes.
 
@@ -369,7 +369,7 @@ Example:
 
 displays:
 
-![Example 12](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-12.png)
+![Example 12](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-12.png)
 
 For more informations about using `tabut-cells` function, see the `tabut` package documentation.
 
@@ -402,28 +402,39 @@ plot(df,    x:none,
             ..kw)
 ```
 
-| Argument | Description |
+| <div style="width:220px">Argument</div> | Description |
 |-|-|
 |`df`| The dataframe to display |
 |`x`| The column name for the x-axis. By default, the dataframe index is used. x-axis column name can be datatime objects. In this case, tick labels are displayed using datetime.display(). x-axis can be a column which contains strings. In this case, the strings appears as x-tick labels and `x-tick-step` has no effect. |
 |`y`| The curves to plot as y-axis. By default, all columns of the dataframe are plotted. `y` can be an array of column names to plot. |
 |`x-label`| The label on x-axis. By default, `x-label` is the column name of the chosen column for x-axis.  |
 |`y-label`| The label on y-axis. By default, no label. |
+|`y2-label`| The label on y2-axis. By default, no label. |
 |`label-text-size`| The text size of x-label and y-label.  |
 |`tick-text-size`| The text size for tick labels. |
 |`y-tick-step`| The separation between y-ticks. |
 |`x-tick-step`| The separation between x-ticks. If the dataframe column chosen for x-axis contains strings, `x-tick-step` must be a duration object.|
 |`x-tick-rotate`| An angle for x-tick rotation. |
-|`x-tick-anchor`| Anchor of the tick labels ("west", "east", "center"). Useful when `x-tick-rotate` is used. |
+|`x-tick-anchor`| Anchor of the x-tick labels ("north","south","west", "east", "center"). Useful when `x-tick-rotate` is used. |
+|`y-tick-rotate`| An angle for y-tick rotation. |
+|`y-tick-anchor`| Anchor of the y-tick labels ("north","south","west", "east", "center"). Useful when `y-tick-rotate` is used. |
+|`y2-tick-rotate`| An angle for y2-tick rotation. |
+|`y2-tick-anchor`| Anchor of the y2-tick labels ("north","south","west", "east", "center"). Useful when `y2-tick-rotate` is used. |
 |`x-minor-tick-step`| The separation between minor x-ticks. |
 |`x-min`| The min value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-min` must be a datetime object. |
 |`y-min`| The min value for y-axis |
 |`x-max`| The max value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-max` must be a datetime object. |
 |`y-max`| The max value for y-axis. |
 |`grid`| `true` to draw a grid for both x and y-axis. |
-|`width`| The width of the canvas plot. |
-|`style`| A dictionary which defines each curve plot style. It is indexed by column names of the dataframe. Each value of this dictionary is also a dictionary with the following allowed keys: <BR> `color`: the color of the curve. Any values accepted by `cetz` is allowed.<BR> `label`: the label of the curve. By default label is the column name of the dataframe.<BR> `thickness`: the thickness of the curve. 0.5pt by default.<BR> `mark`: the mark for each point of the curve. By default, no mark but any character is allowed in addition to any value accepted by `cetz`.<BR>`mark-size`: the size of the mark. 0.15 by default.<BR>`dash`: `none`, `dashed`, `dotted` or any value accepted by `cetz`. <BR>In addition, any argument which is accepted by `cetz` will be passed to the `cetz.plot.add` function. |
+|`width`| The width of the canvas plot. An absolute or relative length which default is 80%. |
+|`aspect-ratio`| The ratio height/width of the plot canvas. A ratio object which default is 50%. |
+|`style`| A dictionary which defines each curve plot style. It is indexed by column names of the dataframe. Each value of this dictionary is also a dictionary with the following allowed keys: <BR> `color`: the color of the curve. Any values accepted by `cetz` is allowed.<BR> `label`: the label of the curve. By default label is the column name of the dataframe.<BR> `thickness`: the thickness of the curve. 0.5pt by default.<BR> `mark`: the mark for each point of the curve. By default, no mark but any character is allowed in addition to any value accepted by `cetz`.<BR>`mark-size`: the size of the mark. 0.15 by default.<BR>`dash`: `none`, `dashed`, `dotted` or any value accepted by `cetz`.<BR>`axes`: specifies which axes should be used for the given curve `("x","y")` for bottom / left axis and `("x","y2")` for bottom/right axis. <BR>In addition, any argument which is accepted by `cetz` will be passed to the `cetz.plot.add` function. |
 |`legend-default-position`| Legend default position. All values accepted by `cetz` for legend position are allowed. |
+|`legend-padding`| Space between the legend frame and and content. Default: 0.15 |
+|`legend-spacing`| Space between the legend frame and plot axis. Default: 0.3|
+|`legend-item-spacing`| Space between legend items. Default: 0.15|
+|`legend-item-preview-height`| Height of each legend previews. Default: 0.2|
+|`legend-item-preview-width`| Width of each legend previews. Default: 0.6|
 | `kw` | additionnal arguments passed to `cetz.plot.plot` function. See `cetz` documentation for more information on available arguments. |
 
 
@@ -443,4 +454,4 @@ Example:
 ```
 displays:
 
-![Example 13](https://raw.githubusercontent.com/oravard/typst-dataframes/main/img/example-13.png)
+![Example 13](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-13.png)
