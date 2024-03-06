@@ -19,7 +19,7 @@ Stocks:
 #tbl(df)
 #plot(df, x:"Year", x-tick-step:1)
  ```
-![Example 1](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-01.png)
+![Example 1](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-01.png)
 
 ## Dataframe creation
 
@@ -98,7 +98,7 @@ The function `add-colls` add columns to the dataframe. Columns are provided with
 ```
 displays:
 
-![Example 2](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-02.png)
+![Example 2](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-02.png)
 
 a shortcut `hcat` to `add-cols` is provided for people who are more confortable with Python or Julia terminology.
 
@@ -127,7 +127,7 @@ The function `add-rows` add rows to the dataframe. Rows are provided as named ar
 ```
 displays:
 
-![Example 3](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-03.png)
+![Example 3](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-03.png)
 
 If the arguments of function `add-rows` do not provides each columns, the missing elements are replaced with the `missing` value:
 ```typst
@@ -141,7 +141,7 @@ If the arguments of function `add-rows` do not provides each columns, the missin
 ```
 displays:
 
-![Example 4](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-04.png)
+![Example 4](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-04.png)
 
 Be carreful using the `missing` argument which default is `none`. Future numerical operations using rows / cols will raise an error. Provide a numerical value for the `missing` argument if you want to do future numerical operations between rows / cols.
 
@@ -174,7 +174,7 @@ The concatenation of two dataframes can be done using the `concat` function. The
 ```
 displays:
 
-![Example 5](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-05.png)
+![Example 5](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-05.png)
 
 The dataframe `df2` is equivalent to adding row to `df` while `df3` is equivalent to adding column to `df`.
 
@@ -196,7 +196,7 @@ Example :
 displays:
 
 
-![Example 6](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-06.png)
+![Example 6](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-06.png)
 
 ### select 
 
@@ -256,7 +256,7 @@ For example, some elements can be added to a dataframe using the `add(df,other)`
 
 Example:
 
-![Example 7](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-07.png)
+![Example 7](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-07.png)
 
 These rules applies to all the following two elements functions:
 
@@ -281,7 +281,7 @@ The cumulative operations are the following:
 Example:
 
 
-![Example 8](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-08.png)
+![Example 8](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-08.png)
 
 ### Folding operation
 
@@ -302,7 +302,7 @@ The folding operations are the following:
 Example:
 
 
-![Example 9](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-09.png)
+![Example 9](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-09.png)
 
 ### Other operations
 
@@ -324,7 +324,7 @@ Example:
 ```
 displays:
 
-![Example 10](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-10.png)
+![Example 10](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-10.png)
 
 
 ## Display a dataframe as table
@@ -340,7 +340,7 @@ Example: display transposed dataframe
 displays:
 
 
-![Example 11](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-11.png)
+![Example 11](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-11.png)
 
 if you want to specify more display details using `tablex` (as an example), the `tabut-cells` is available for dataframes.
 
@@ -369,7 +369,7 @@ Example:
 
 displays:
 
-![Example 12](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-12.png)
+![Example 12](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-12.png)
 
 For more informations about using `tabut-cells` function, see the `tabut` package documentation.
 
@@ -457,4 +457,4 @@ Example:
 ```
 displays:
 
-![Example 13](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1.0/img/example-13.png)
+![Example 13](https://raw.githubusercontent.com/oravard/typst-dataframes/0.1/img/example-13.png)
