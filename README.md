@@ -1,4 +1,4 @@
- # DataFrames
+ # dframes: DataFrames for typst
 
  This packages deals with data frames which are objects that are similar to pandas dataframes in python or DataFrames in Julia.
  
@@ -206,7 +206,7 @@ The select function allows to select rows or columns.
 
 The arguments of the `select` function are:
 - `rows` : (default:`auto`) a filter function which return `true` for all desired rows. 
-- `cols`: (default:`auto`) an array of col names or a function which returns `true` for the desired cols.
+- `cols`: (default:`auto`) an array of col names or a string of col name or a function which returns `true` for the desired cols.
 
 Example:
 
@@ -412,15 +412,18 @@ plot(df,    x:none,
 |`y2-label`| The label on y2-axis. By default, no label. |
 |`label-text-size`| The text size of x-label and y-label.  |
 |`tick-text-size`| The text size for tick labels. |
-|`y-tick-step`| The separation between y-ticks. |
-|`x-tick-step`| The separation between x-ticks. If the dataframe column chosen for x-axis contains strings, `x-tick-step` must be a duration object.|
+|`y-tick-step`| The separation between y axis ticks. |
+|`y2-tick-step`| The separation between y2 axis ticks. |
+|`x-tick-step`| The separation between x axis ticks. If the dataframe column chosen for x-axis contains datetimes, `x-tick-step` must be a duration object.|
 |`x-tick-rotate`| An angle for x-tick rotation. |
 |`x-tick-anchor`| Anchor of the x-tick labels ("north","south","west", "east", "center"). Useful when `x-tick-rotate` is used. |
 |`y-tick-rotate`| An angle for y-tick rotation. |
 |`y-tick-anchor`| Anchor of the y-tick labels ("north","south","west", "east", "center"). Useful when `y-tick-rotate` is used. |
 |`y2-tick-rotate`| An angle for y2-tick rotation. |
 |`y2-tick-anchor`| Anchor of the y2-tick labels ("north","south","west", "east", "center"). Useful when `y2-tick-rotate` is used. |
-|`x-minor-tick-step`| The separation between minor x-ticks. |
+|`x-minor-tick-step`| The separation between minor x axis ticks. |
+|`y-minor-tick-step`| The separation between minor y axis ticks. |
+|`y2-minor-tick-step`| The separation between minor y2 axis ticks. |
 |`x-min`| The min value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-min` must be a datetime object. |
 |`y-min`| The min value for y-axis |
 |`x-max`| The max value for x-axis. It has no effect if the dataframe column chosen for x-axis contains strings. If the dataframe column chosen  for x-axis contains datetime objects, `x-max` must be a datetime object. |

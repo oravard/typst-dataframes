@@ -257,7 +257,7 @@
 }
 
 #let select(df, cols:auto, rows:auto) = {
-  if rows != auto and df.len()>0{
+  if rows != auto and df.len()>0 {
     df = to-array(df)
     df = df.filter(rows)
     df = array-to-dataframe(df)
@@ -267,6 +267,8 @@
     cols = df.keys()
   } else if type(cols)==function {
     cols = df.keys().filter(cols)
+  } else if type(cols)==type("") {
+    cols = (cols,)
   }
   let keys = df.keys()
   for key in cols {
@@ -291,7 +293,7 @@
 //          columns of df apply the func term by term by the column
 //          of other with the same name.
 #let apply(df, other, func:(r1,r2)=>(r1+r2)) = {
-  if type(other)==type(1) or type(other)==float {
+  if type(other)!=array and type(other)!=dictionary {
     for key in df.keys() {
       df.insert(key, df.at(key).map(r=>func(r,other)))
     }
@@ -316,8 +318,6 @@
     } else {
       panic("multiply dataframe with another needs nb-cols==1 or nb-cols==dataframe nb-cols")
     }
-  } else {
-    panic("Cannot multiply a dataframe with an object of type "+repr(type(other)))
   }
   df
 }
@@ -349,7 +349,13 @@
 }
 
 #let abs(df) = {apply-unary(df)}
-#let round(df, digits:0) = {apply-unary(df,func:r=>calc.round(r, digits: digits))}
+#let round(df, digits:0) = {apply-unary(df,func:r=>{
+  if type(r)==float {
+    calc.round(r, digits: digits)
+  } else {
+    r
+  }
+})}
 #let ceil(df) = {apply-unary(df,func:r=>calc.ceil(r))}
 #let floor(df) = {apply-unary(df,func:r=>calc.floor(r))}
 #let exp(df) = {apply-unary(df,func:r=>calc.exp(r))}
@@ -444,10 +450,10 @@
   for key in keys {
     if type(df.at(key).at(0))==datetime {
       cols.push((header:align(center, [#set text(weight: "bold")
-      #key]), func:r=>align(center,r.at(key).display()) ))
+      #key.replace("_"," ")]), func:r=>align(center,r.at(key).display()) ))
     } else {
       cols.push((header:align(center, [#set text(weight: "bold")
-      #key]), func:r=>align(center,[#r.at(key)]) ))
+      #key.replace("_"," ")]), func:r=>align(center,[#r.at(key)]) ))
     }
   }
   let tab = _tabut_.tabut(
@@ -478,23 +484,39 @@
 
 #let plot(df, x:none, y:none, 
                   x-label:none, 
-                  y-label:none, 
-                  label-text-size:11pt,
-                  tick-text-size:8pt,
-                  y-tick-step:auto,
+                  y-label:none,
+                  y2-label:none, 
+                  label-text-size:1em,
+                  tick-text-size:0.8em,
                   x-tick-step:auto,
+                  y-tick-step:auto,
+                  y2-tick-step:auto,
                   x-tick-rotate:0deg,
-                  x-tick-anchor:auto,
-                  x-tick-extra-space: 0cm,
+                  x-tick-anchor:"north",
+                  y-tick-rotate:0deg,
+                  y-tick-anchor:"east",
+                  y2-tick-rotate:0deg,
+                  y2-tick-anchor:"west",
                   x-minor-tick-step:auto,
+                  y-minor-tick-step:auto,
+                  y2-minor-tick-step:auto,
                   x-min:none,
                   y-min:none,
                   x-max:none,
                   y-max:none,
+                  x-axis-padding:2%,
+                  y-axis-padding:2%,
+                  axis-style:"scientific",
                   grid:false,
                   width:80%,
+                  aspect-ratio:50%,
                   style:(:),
                   legend-default-position:"legend.inner-south-east",
+                  legend-padding:0.15,
+                  legend-spacing:0.3,
+                  legend-item-spacing:0.15,
+                  legend-item-preview-height:0.2,
+                  legend-item-preview-width:0.6,
                   ..kw) = {
   if y==none {
     y=df.keys()
@@ -516,7 +538,7 @@
   } else {
     assert(x in df.keys(), message: "x should be in dataframe column names")
     if x-label == none {
-      x-label = x
+      x-label = x.replace("_"," ")
     }
     x = df.at(x)
     if type(x.at(0))==datetime {
@@ -526,6 +548,10 @@
   }
   
   let curves = ()
+  let yM = -1e99
+  let ym = 1e99
+  let xM = -1e99
+  let xm = 1e99
   let i = 0
   for key in y {
     let y_ = df.at(key)
@@ -539,54 +565,57 @@
             mark : none,
             mark-size : 0.15,
             dash : none,
-            label:key
+            label:key.replace("_"," "),
+            axes:("x","y")
     )
     curve-style = curve-style + style.at(key,default:(:))
-    let c = curve(data:data, ..curve-style)
-    
-    curves.push(c.at(0))
+    let c = curve(data:data, ..curve-style).at(0)
+    if curve-style.axes.at(1)=="y" {
+      let cy_data = c.data.map(r=>r.at(1))
+      yM=calc.max(yM,..cy_data)
+      ym=calc.min(ym,..cy_data)
+    }
+    if curve-style.axes.at(0)=="x" {
+      let cx_data = c.data.map(r=>r.at(0))
+      xM=calc.max(xM,..cx_data)
+      xm=calc.min(xm,..cx_data)
+    }
+    curves.push(c)
     i = i+1
   }
   
-  let yM = -1e99
-  let ym = 1e99
-  let xM = -1e99
-  let xm = 1e99
-  for c in curves {
-    let cy_data = c.data.map(r=>r.at(1))
-    yM=calc.max(yM,..cy_data)
-    ym=calc.min(ym,..cy_data)
-    let cx_data = c.data.map(r=>r.at(0))
-    xM=calc.max(xM,..cx_data)
-    xm=calc.min(xm,..cx_data)
-  }
+  
   if x-min==none {
-    x-min = xm - (xM - xm)/20
+    x-min = xm - (xM - xm) * x-axis-padding/100%
   }
   if y-min==none {
-    y-min = ym - (yM - ym)/20
+    y-min = ym - (yM - ym) * y-axis-padding/100%
   }
   if x-max==none {
-    x-max = xM + (xM - xm)/20
+    x-max = xM + (xM - xm) * x-axis-padding/100%
   }
   if y-max==none {
-    y-max = yM + (yM - ym)/20
+    y-max = yM + (yM - ym) * y-axis-padding/100%
   }
   let x-format(r) = {
+
     if x-datetime-format {
-      // return move(dx:x-tick-extra-space, rotate(x-tick-rotate, origin:left+horizon)[#julian_date_to_datetime(r).display()])
-      [#julian_date_to_datetime(r).display()]
+      text(size:tick-text-size)[#julian_date_to_datetime(r).display()]
     } else if x-string-format {
       let i=int(r)
       if i>=0 and i < orig-x.len() {
-        [#orig-x.at(int(r))]
+        text(size:tick-text-size)[#orig-x.at(int(r))]
       } else {[]}
-    }else {
-      // return move(dx:x-tick-extra-space,rotate(x-tick-rotate, origin:left+horizon)[#r])
-      [#r]
+    } else {
+      text(size:tick-text-size)[#r]
     }
   }
-  
+  let y-format(r) = {
+    text(size:tick-text-size)[#r]
+  }
+  let y2-format(r) = {
+    text(size:tick-text-size)[#r]
+  }
   if type(x-tick-step)==duration {
     x-tick-step = x-tick-step.seconds()
   }
@@ -598,12 +627,16 @@
   }
   
   let pl = _cetz_.plot.plot(
-                        size: (10,5), 
+                        size: (10,10*aspect-ratio/100%), 
                         y-tick-step: y-tick-step,
+                        y2-tick-step: y2-tick-step,
                         x-tick-step:x-tick-step,
                         x-minor-tick-step:x-minor-tick-step,
+                        y-minor-tick-step:y-minor-tick-step,
+                        y2-minor-tick-step:y2-minor-tick-step,
                         x-label:{set text(size:label-text-size);x-label},
                         y-label:{set text(size:label-text-size);y-label},
+                        y2-label:{set text(size:label-text-size);y2-label},
                         y-max:y-max,
                         y-min:y-min,
                         x-min:x-min,
@@ -611,32 +644,39 @@
                         x-grid:grid,
                         y-grid:grid,
                         x-format:x-format,
-                        axis-style:"scientific",
-                        // plot-style:defst,
+                        y-format:y-format,
+                        y2-format:y2-format,
+                        axis-style:axis-style,
                         legend:auto,
                         legend-style:(default-position:legend-default-position,
-                                      padding:0.15,
-                                      item:(spacing:0.15, preview:(height:0.2, width:0.5)),
+                                      padding:legend-padding,
+                                      item:(spacing:legend-item-spacing, 
+                                            preview:(height:legend-item-preview-height, 
+                                                     width:legend-item-preview-width)),
                                       orientation:ttb,
-                                      spacing:0.3
+                                      spacing:legend-spacing
                                     ),
                         curves,
                         ..kw
         )
+  // set text(size:tick-text-size)
   
-  set text(size:tick-text-size)
   if type(width)==ratio {
     layout(size=>{_cetz_.canvas(
       {
         _cetz_.draw.set-style(axes: (
-                        bottom: (tick:(label:(angle:x-tick-rotate, anchor:x-tick-anchor)))
+                        bottom: (tick:(label:(angle:x-tick-rotate, anchor:x-tick-anchor))),
+                        left: (tick:(label:(angle:y-tick-rotate, anchor:y-tick-anchor))),
+                        right: (tick:(label:(angle:y2-tick-rotate, anchor:y2-tick-anchor)))
                         ))
         pl
         }, length:size.width/10*width, background:none)})
   } else {
     _cetz_.canvas({
       _cetz_.draw.set-style(axes: (
-                bottom: (tick:(label:(angle:x-tick-rotate, anchor:x-tick-anchor)))
+                bottom: (tick:(label:(angle:x-tick-rotate, anchor:x-tick-anchor))),
+                left: (tick:(label:(angle:y-tick-rotate, anchor:y-tick-anchor))),
+                right: (tick:(label:(angle:y2-tick-rotate, anchor:y2-tick-anchor)))
                 ))
       pl
       }, length:width/10, background:none)
